@@ -3,8 +3,9 @@
   "name": "Inline Tag",
   "version": "1.0.0",
   "minAppVersion": "1.4.0",
-  "description": "Renders [[#tag|Label]] tokens as clickable tag-search links in Reading view.",
+  "description": "Reference tags with readable labels that open native tag search on click.",
   "author": "Mehdi Bouhalassa",
   "authorUrl": "https://github.com/MB-YUL",
+  "fundingUrl": "https://ko-fi.com/mehdibouhalassa",
   "isDesktopOnly": true
 }
