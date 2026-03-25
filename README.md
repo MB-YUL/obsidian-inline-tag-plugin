@@ -27,13 +27,11 @@ Obsidian tags are powerful, but there's no built-in way to reference a tag inlin
 
 In **Reading view**, this renders as a clickable label. Clicking it opens Obsidian Search pre-loaded with `tag:#tag-name`, showing every note associated with that tag — including notes that reference it via this syntax.
 
-![Reading view with search results](demo-01.png)
-*Tags render as clickable labels. Clicking one searches across all notes that share it — here returning 5 results across two notes.*
-
-The raw syntax is always preserved in the editor, exactly as you typed it.
-
 ![Source mode showing raw syntax](demo-02.png)
 *Write `[[#tag|Label]]` anywhere in your note — `#tag` is the searchable target, `Label` is what gets displayed.*
+
+![Reading view with search results](demo-01.png)
+*Tags render as clickable labels. Clicking one searches across all notes that share it — here returning 5 results across two notes.*
 
 ---
 
