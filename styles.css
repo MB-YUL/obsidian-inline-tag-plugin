@@ -1,0 +1,30 @@
+/* Hybrid Tag Link — base style (link mode) */
+.hybrid-tag-link {
+  cursor: pointer;
+  color: var(--link-color);
+  text-decoration: var(--link-decoration, none);
+  border-radius: 3px;
+  padding: 0 2px;
+  transition: text-decoration 0.1s;
+}
+
+.hybrid-tag-link:hover {
+  text-decoration: underline;
+  color: var(--link-color-hover, var(--link-color));
+}
+
+/* Tag-pill style (styleMode = "tag") */
+.hybrid-tag-link--tag {
+  display: inline-block;
+  background: var(--tag-background);
+  color: var(--tag-color);
+  border-radius: var(--tag-radius, 4px);
+  padding: var(--tag-padding, 1px 6px);
+  font-size: var(--tag-size, 0.9em);
+  text-decoration: none;
+}
+
+.hybrid-tag-link--tag:hover {
+  text-decoration: none;
+  opacity: 0.85;
+}

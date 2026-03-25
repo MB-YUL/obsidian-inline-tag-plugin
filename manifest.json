@@ -1,0 +1,10 @@
+{
+  "id": "hybrid-tag-link",
+  "name": "Hybrid Tag Link",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Renders [[#tag|Label]] tokens as clickable tag-search links in Reading view.",
+  "author": "local",
+  "authorUrl": "",
+  "isDesktopOnly": true
+}
