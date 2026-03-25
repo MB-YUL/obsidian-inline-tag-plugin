@@ -5,6 +5,13 @@
 [![GitHub release](https://img.shields.io/github/v/release/MB-YUL/obsidian-inline-tag-link)](https://github.com/MB-YUL/obsidian-inline-tag-link/releases)
 [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22inline-tag-link%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-stats%2FHEAD%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=inline-tag-link)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
+
+## Support
+
+If this plugin saves you time, a coffee is always appreciated ☕
+
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/mehdibouhalassa)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-%23FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/mehdibouhalassa)
 
@@ -24,7 +31,7 @@ In **Reading view**, this renders as a clickable label. Clicking it opens Obsidi
 
 | Source | Reading view |
 |--------|-------------|
-| `Je travaille sur [[#info-sols\|Info-Sols]].` | Je travaille sur **Info-Sols**. *(clickable)* |
+| `Working on [[#backend\|Backend]] this week.` | Working on **Backend** this week. *(clickable)* |
 | `See [[#work/dev\|Web Development]] tasks.` | See **Web Development** tasks. *(clickable)* |
 
 ---
@@ -43,10 +50,10 @@ In **Reading view**, this renders as a clickable label. Clicking it opens Obsidi
 ### Valid
 
 ```
-[[#info-sols|Info-Sols]]
+[[#backend|Backend]]
 [[#work/dev|Web Development]]
 [[#ui-ux|UI/UX]]
-[[#réunion|Réunion d'équipe]]
+[[#project-alpha|Project Alpha]]
 ```
 
 ### Invalid (left as raw text)
@@ -116,28 +123,19 @@ Both usages are discoverable from a single click.
 
 ## Contributing
 
-Issues and PRs are welcome on [GitHub](https://github.com/MB-YUL/obsidian-inline-tag-link).
+Issues and PRs are welcome on [GitHub](https://github.com/MB-YUL/obsidian-inline-tag-plugin).
 
 To build locally:
 
 ```sh
-git clone https://github.com/MB-YUL/obsidian-inline-tag-link
-cd obsidian-inline-tag-link
+git clone https://github.com/MB-YUL/obsidian-inline-tag-plugin
+cd obsidian-inline-tag-plugin
 npm install
 npm run dev      # watch mode
 npm run build    # production build
 ```
 
 Copy the output (`main.js`, `manifest.json`, `styles.css`) into your vault's plugin folder.
-
----
-
-## Support
-
-If this plugin saves you time, a coffee is always appreciated ☕
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/mehdibouhalassa)
-[![Ko-fi](https://img.shields.io/badge/Ko--fi-%23FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/mehdibouhalassa)
 
 ---
 
