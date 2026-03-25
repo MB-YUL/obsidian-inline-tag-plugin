@@ -33,7 +33,7 @@ In **Reading view**, this renders as a clickable label. Clicking it opens Obsidi
 The raw syntax is always preserved in the editor, exactly as you typed it.
 
 ![Source mode showing raw syntax](demo-02.png)
-*Source mode: the original `[[#tag|Label]]` tokens are untouched. No file is ever rewritten by the plugin.*
+*Write `[[#tag|Label]]` anywhere in your note — `#tag` is the searchable target, `Label` is what gets displayed.*
 
 ---
 
