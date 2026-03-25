@@ -1,9 +1,9 @@
-# Inline Tag Link — Obsidian Plugin
+# Inline Tag — Obsidian Plugin
 
 > Write tag references with display labels. Click to search.
 
-[![GitHub release](https://img.shields.io/github/v/release/MB-YUL/obsidian-inline-tag-link)](https://github.com/MB-YUL/obsidian-inline-tag-link/releases)
-[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22inline-tag-link%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-stats%2FHEAD%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=inline-tag-link)
+[![GitHub release](https://img.shields.io/github/v/release/MB-YUL/obsidian-inline-tag-plugin)](https://github.com/MB-YUL/obsidian-inline-tag-plugin/releases)
+[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22inline-tag%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-stats%2FHEAD%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=inline-tag)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -73,13 +73,13 @@ In **Reading view**, this renders as a clickable label. Clicking it opens Obsidi
 
 1. Open **Settings → Community plugins**
 2. Disable Safe mode if prompted
-3. Click **Browse** and search for `Inline Tag Link`
+3. Click **Browse** and search for `Inline Tag`
 4. Install and enable
 
 ### Manual
 
-1. Download the latest release from [GitHub Releases](https://github.com/MB-YUL/obsidian-inline-tag-link/releases)
-2. Extract into your vault's `.obsidian/plugins/inline-tag-link/` folder
+1. Download the latest release from [GitHub Releases](https://github.com/MB-YUL/obsidian-inline-tag-plugin/releases)
+2. Copy `main.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/inline-tag/` folder
 3. Enable the plugin in **Settings → Community plugins**
 
 ---
@@ -128,6 +128,7 @@ To build locally:
 
 ```sh
 git clone https://github.com/MB-YUL/obsidian-inline-tag-plugin
+
 cd obsidian-inline-tag-plugin
 npm install
 npm run dev      # watch mode
