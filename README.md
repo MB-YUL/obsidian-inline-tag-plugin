@@ -2,9 +2,11 @@
 
 > Write tag references with display labels. Click to search.
 
-[![GitHub release](https://img.shields.io/github/v/release/your-username/obsidian-inline-tag-link)](https://github.com/your-username/obsidian-inline-tag-link/releases)
+[![GitHub release](https://img.shields.io/github/v/release/MB-YUL/obsidian-inline-tag-link)](https://github.com/MB-YUL/obsidian-inline-tag-link/releases)
 [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22inline-tag-link%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-stats%2FHEAD%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=inline-tag-link)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/mehdibouhalassa)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-%23FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/mehdibouhalassa)
 
 ---
 
@@ -70,7 +72,7 @@ In **Reading view**, this renders as a clickable label. Clicking it opens Obsidi
 
 ### Manual
 
-1. Download the latest release from [GitHub Releases](https://github.com/your-username/obsidian-inline-tag-link/releases)
+1. Download the latest release from [GitHub Releases](https://github.com/MB-YUL/obsidian-inline-tag-link/releases)
 2. Extract into your vault's `.obsidian/plugins/inline-tag-link/` folder
 3. Enable the plugin in **Settings → Community plugins**
 
@@ -114,12 +116,12 @@ Both usages are discoverable from a single click.
 
 ## Contributing
 
-Issues and PRs are welcome on [GitHub](https://github.com/your-username/obsidian-inline-tag-link).
+Issues and PRs are welcome on [GitHub](https://github.com/MB-YUL/obsidian-inline-tag-link).
 
 To build locally:
 
 ```sh
-git clone https://github.com/your-username/obsidian-inline-tag-link
+git clone https://github.com/MB-YUL/obsidian-inline-tag-link
 cd obsidian-inline-tag-link
 npm install
 npm run dev      # watch mode
@@ -134,11 +136,11 @@ Copy the output (`main.js`, `manifest.json`, `styles.css`) into your vault's plu
 
 If this plugin saves you time, a coffee is always appreciated ☕
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/your-username)
-[![Ko-fi](https://img.shields.io/badge/Ko--fi-%23FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/your-username)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/mehdibouhalassa)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-%23FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/mehdibouhalassa)
 
 ---
 
 ## License
 
-[MIT](LICENSE) © your-username
+[MIT](LICENSE) © MB-YUL
