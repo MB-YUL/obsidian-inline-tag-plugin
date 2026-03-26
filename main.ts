@@ -1,4 +1,13 @@
 import { App, Plugin, PluginSettingTab, Setting, TFile } from "obsidian";
+import {
+	ViewPlugin,
+	ViewUpdate,
+	Decoration,
+	DecorationSet,
+	WidgetType,
+	EditorView,
+} from "@codemirror/view";
+import { RangeSetBuilder } from "@codemirror/state";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -12,12 +21,14 @@ interface PluginSettings {
 	showCanonicalTagOnHover: boolean;
 	styleMode: "link" | "tag";
 	debugLogging: boolean;
+	enableLivePreviewDecorations: boolean;
 }
 
 const DEFAULT_SETTINGS: PluginSettings = {
 	showCanonicalTagOnHover: true,
 	styleMode: "link",
 	debugLogging: false,
+	enableLivePreviewDecorations: true,
 };
 
 // ── Parser ───────────────────────────────────────────────────────────────────
@@ -111,7 +122,7 @@ function processNode(el: HTMLElement, settings: PluginSettings, debug: boolean):
 			cursor = match.index + match[0].length;
 
 			if (debug) {
-				console.log("[hybrid-tag-link] rendered", token);
+				console.log("[inline-tag] rendered", token);
 			}
 		}
 
@@ -124,6 +135,95 @@ function processNode(el: HTMLElement, settings: PluginSettings, debug: boolean):
 	}
 }
 
+// ── Live Preview (CodeMirror 6) ───────────────────────────────────────────────
+
+class HybridTagWidget extends WidgetType {
+	constructor(
+		private readonly tag: string,
+		private readonly label: string,
+		private readonly settings: PluginSettings,
+	) {
+		super();
+	}
+
+	eq(other: HybridTagWidget): boolean {
+		return (
+			other.tag === this.tag &&
+			other.label === this.label &&
+			other.settings.styleMode === this.settings.styleMode &&
+			other.settings.showCanonicalTagOnHover === this.settings.showCanonicalTagOnHover
+		);
+	}
+
+	toDOM(_view: EditorView): HTMLElement {
+		const token: HybridTagToken = {
+			raw: `[[#${this.tag}|${this.label}]]`,
+			tag: this.tag,
+			label: this.label,
+		};
+		return createHybridElement(token, this.settings);
+	}
+
+	ignoreEvent(_event: Event): boolean {
+		// Let clicks propagate to the document-level delegated handler.
+		return false;
+	}
+}
+
+function buildDecorations(view: EditorView, settings: PluginSettings): DecorationSet {
+	if (!settings.enableLivePreviewDecorations) {
+		return Decoration.none;
+	}
+
+	const builder = new RangeSetBuilder<Decoration>();
+	const cursorRanges = view.state.selection.ranges;
+
+	for (const { from, to } of view.visibleRanges) {
+		const text = view.state.doc.sliceString(from, to);
+
+		TOKEN_REGEX.lastIndex = 0;
+		let match: RegExpExecArray | null;
+
+		while ((match = TOKEN_REGEX.exec(text)) !== null) {
+			const tokenStart = from + match.index;
+			const tokenEnd   = tokenStart + match[0].length;
+
+			// Reveal raw syntax when the cursor is inside the token.
+			const cursorInside = cursorRanges.some(
+				(r) => r.from <= tokenEnd && r.to >= tokenStart,
+			);
+			if (cursorInside) continue;
+
+			const token = parseHybridTagToken(match[0]);
+			if (!token) continue;
+
+			builder.add(
+				tokenStart,
+				tokenEnd,
+				Decoration.replace({
+					widget: new HybridTagWidget(token.tag, token.label, settings),
+				}),
+			);
+		}
+	}
+
+	return builder.finish();
+}
+
+function createHybridTagViewPlugin(settings: PluginSettings) {
+	return ViewPlugin.define(
+		(view: EditorView) => ({
+			decorations: buildDecorations(view, settings),
+			update(update: ViewUpdate) {
+				if (update.docChanged || update.selectionSet || update.viewportChanged) {
+					this.decorations = buildDecorations(update.view, settings);
+				}
+			},
+		}),
+		{ decorations: (v) => v.decorations },
+	);
+}
+
 // ── Plugin ───────────────────────────────────────────────────────────────────
 
 export default class HybridTagLinkPlugin extends Plugin {
@@ -132,6 +232,9 @@ export default class HybridTagLinkPlugin extends Plugin {
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
+
+		// Live Preview decorations (CodeMirror 6).
+		this.registerEditorExtension(createHybridTagViewPlugin(this.settings));
 
 		// Reading view post-processor.
 		this.registerMarkdownPostProcessor((el, ctx) => {
@@ -164,7 +267,7 @@ export default class HybridTagLinkPlugin extends Plugin {
 				a.replaceWith(createHybridElement(token, this.settings));
 
 				if (this.settings.debugLogging) {
-					console.log("[hybrid-tag-link] intercepted link →", token);
+					console.log("[inline-tag] intercepted link →", token);
 				}
 			});
 
@@ -183,7 +286,7 @@ export default class HybridTagLinkPlugin extends Plugin {
 			const query = buildSearchQuery(target.dataset.tag);
 
 			if (this.settings.debugLogging) {
-				console.log("[hybrid-tag-link] search query:", query);
+				console.log("[inline-tag] search query:", query);
 			}
 
 			// Use Obsidian's internal global-search plugin to open the search pane.
@@ -198,8 +301,6 @@ export default class HybridTagLinkPlugin extends Plugin {
 			if (search?.instance?.openGlobalSearch) {
 				search.instance.openGlobalSearch(query);
 			} else {
-				// Fallback: execute the built-in search command then set query via
-				// the search leaf if available.
 				this.app.commands.executeCommandById("global-search:open");
 			}
 		};
@@ -235,6 +336,19 @@ class HybridTagLinkSettingTab extends PluginSettingTab {
 	display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
+
+		new Setting(containerEl)
+			.setName("Live Preview decorations")
+			.setDesc("Render [[#tag|Label]] tokens as styled labels in Live Preview. The cursor reveals the raw syntax when placed inside a token.")
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.enableLivePreviewDecorations)
+					.onChange(async (value) => {
+						this.plugin.settings.enableLivePreviewDecorations = value;
+						await this.plugin.saveSettings();
+						this.app.workspace.updateOptions();
+					})
+			);
 
 		new Setting(containerEl)
 			.setName("Show canonical tag on hover")
