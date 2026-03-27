@@ -226,7 +226,6 @@ function createHybridTagViewPlugin(settings: PluginSettings) {
 
 export default class HybridTagLinkPlugin extends Plugin {
 	settings!: PluginSettings;
-	private clickHandler!: (e: MouseEvent) => void;
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
@@ -276,7 +275,8 @@ export default class HybridTagLinkPlugin extends Plugin {
 		});
 
 		// Delegated click handler for all rendered hybrid tokens.
-		this.clickHandler = (e: MouseEvent) => {
+		// registerDomEvent ensures automatic cleanup on plugin unload.
+		this.registerDomEvent(document, "click", (e: MouseEvent) => {
 			const target = (e.target as HTMLElement).closest(".hybrid-tag-link") as HTMLElement | null;
 			if (!target?.dataset.tag) return;
 			e.preventDefault();
@@ -301,15 +301,9 @@ export default class HybridTagLinkPlugin extends Plugin {
 			} else {
 				(this.app as App & { commands: { executeCommandById: (id: string) => void } }).commands.executeCommandById("global-search:open");
 			}
-		};
-
-		document.addEventListener("click", this.clickHandler);
+		});
 
 		this.addSettingTab(new HybridTagLinkSettingTab(this.app, this));
-	}
-
-	onunload(): void {
-		document.removeEventListener("click", this.clickHandler);
 	}
 
 	async loadSettings(): Promise<void> {
