@@ -277,7 +277,7 @@ export default class HybridTagLinkPlugin extends Plugin {
 		// Delegated click handler for all rendered hybrid tokens.
 		// registerDomEvent ensures automatic cleanup on plugin unload.
 		this.registerDomEvent(document, "click", (e: MouseEvent) => {
-			const target = (e.target as HTMLElement).closest(".hybrid-tag-link") as HTMLElement | null;
+			const target = (e.target as HTMLElement).closest<HTMLElement>(".hybrid-tag-link");
 			if (!target?.dataset.tag) return;
 			e.preventDefault();
 
@@ -333,8 +333,8 @@ class HybridTagLinkSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName("Live Preview decorations")
-			.setDesc("Render [[#tag|Label]] tokens as styled labels in Live Preview. The cursor reveals the raw syntax when placed inside a token.")
+			.setName("Live preview decorations")
+			.setDesc("Render [[#tag|label]] tokens as styled labels in live preview. The cursor reveals the raw syntax when placed inside a token.")
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.enableLivePreviewDecorations)
@@ -347,7 +347,7 @@ class HybridTagLinkSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Show canonical tag on hover")
-			.setDesc("Display the tag query (e.g. tag:#example) as a tooltip on hover.")
+			.setDesc("Display the tag query (for example, tag:#example) as a tooltip on hover.")
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.showCanonicalTagOnHover)
