@@ -1,6 +1,6 @@
 {
   "name": "hybrid-tag-link",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Obsidian plugin: render [[#tag|Label]] as clickable tag-search links",
   "main": "main.js",
   "scripts": {
