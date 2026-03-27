@@ -88,7 +88,7 @@ In **Reading view**, this renders as a clickable label. Clicking it opens Obsidi
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Live Preview decorations | On | Render tokens as styled labels in Live Preview; the cursor reveals raw syntax inside a token |
+| Live Preview decorations | On | Render tokens as styled labels in Live Preview; the cursor reveals raw syntax inside a token. Desktop only — not available on mobile. |
 | Show canonical tag on hover | On | Tooltip shows `tag:#name` on hover |
 | Style mode | Link | `Link` = styled like a wikilink · `Tag pill` = styled like a native tag |
 | Debug logging | Off | Logs to DevTools console (Ctrl+Shift+I) |
@@ -113,6 +113,7 @@ Both usages are discoverable from a single click.
 
 ## Known limitations
 
+- **Live Preview not available on mobile.** Obsidian for Android and iOS does not use the CodeMirror 6 editor extension system, so the Live Preview decoration engine cannot run there. Tokens will render correctly in Reading view on all platforms.
 - No autocomplete while typing tokens.
 - No hover preview of matching notes.
 - No tag rename / refactor tooling.

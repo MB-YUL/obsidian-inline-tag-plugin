@@ -120,7 +120,7 @@ function processNode(el: HTMLElement, settings: PluginSettings, debug: boolean):
 			cursor = match.index + match[0].length;
 
 			if (debug) {
-				console.log("[inline-tag] rendered", token);
+				console.debug("[inline-tag] rendered", token);
 			}
 		}
 
@@ -264,7 +264,7 @@ export default class HybridTagLinkPlugin extends Plugin {
 				a.replaceWith(createHybridElement(token, this.settings));
 
 				if (this.settings.debugLogging) {
-					console.log("[inline-tag] intercepted link →", token);
+					console.debug("[inline-tag] intercepted link →", token);
 				}
 			});
 
@@ -284,22 +284,25 @@ export default class HybridTagLinkPlugin extends Plugin {
 			const query = buildSearchQuery(target.dataset.tag);
 
 			if (this.settings.debugLogging) {
-				console.log("[inline-tag] search query:", query);
+				console.debug("[inline-tag] search query:", query);
 			}
 
 			// Use Obsidian's internal global-search plugin to open the search pane.
-			const search = (this.app as App & {
+			// Accessing undocumented runtime properties via unknown cast.
+			const appAny = this.app as unknown as {
 				internalPlugins: {
 					getPluginById: (id: string) => {
 						instance?: { openGlobalSearch?: (q: string) => void };
 					} | null;
 				};
-			}).internalPlugins?.getPluginById("global-search");
+				commands: { executeCommandById: (id: string) => void };
+			};
+			const search = appAny.internalPlugins?.getPluginById("global-search");
 
 			if (search?.instance?.openGlobalSearch) {
 				search.instance.openGlobalSearch(query);
 			} else {
-				(this.app as App & { commands: { executeCommandById: (id: string) => void } }).commands.executeCommandById("global-search:open");
+				appAny.commands.executeCommandById("global-search:open");
 			}
 		});
 
