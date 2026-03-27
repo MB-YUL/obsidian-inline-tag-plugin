@@ -116,7 +116,6 @@ Both usages are discoverable from a single click.
 - No autocomplete while typing tokens.
 - No hover preview of matching notes.
 - No tag rename / refactor tooling.
-- Mobile is untested (`isDesktopOnly: true`).
 
 ---
 
