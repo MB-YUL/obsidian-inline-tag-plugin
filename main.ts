@@ -301,7 +301,7 @@ export default class HybridTagLinkPlugin extends Plugin {
 			if (search?.instance?.openGlobalSearch) {
 				search.instance.openGlobalSearch(query);
 			} else {
-				this.app.commands.executeCommandById("global-search:open");
+				(this.app as App & { commands: { executeCommandById: (id: string) => void } }).commands.executeCommandById("global-search:open");
 			}
 		};
 
