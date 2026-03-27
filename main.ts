@@ -63,12 +63,10 @@ function slugifyHeading(heading: string): string {
 // ── DOM helpers ──────────────────────────────────────────────────────────────
 
 function createHybridElement(token: HybridTagToken, settings: PluginSettings): HTMLElement {
-	const span = document.createElement("span");
-	span.className =
+	const cls =
 		"hybrid-tag-link" +
 		(settings.styleMode === "tag" ? " hybrid-tag-link--tag" : "");
-	span.textContent = token.label;
-	span.dataset.tag = token.tag;
+	const span = createSpan({ cls, text: token.label, attr: { "data-tag": token.tag } });
 	if (settings.showCanonicalTagOnHover) {
 		span.title = buildSearchQuery(token.tag);
 	}
@@ -77,7 +75,7 @@ function createHybridElement(token: HybridTagToken, settings: PluginSettings): H
 
 /**
  * Walk text nodes inside `el`, find token matches, and replace them with
- * rendered span elements. Uses safe DOM APIs (no innerHTML).
+ * rendered span elements. Uses Obsidian DOM helpers (no innerHTML).
  */
 function processNode(el: HTMLElement, settings: PluginSettings, debug: boolean): void {
 	// Collect text nodes first to avoid mutating the tree while walking it.
@@ -100,7 +98,7 @@ function processNode(el: HTMLElement, settings: PluginSettings, debug: boolean):
 		}
 		if (matches.length === 0) continue;
 
-		const frag = document.createDocumentFragment();
+		const frag = createFragment();
 		let cursor = 0;
 
 		for (const match of matches) {

@@ -88,6 +88,7 @@ In **Reading view**, this renders as a clickable label. Clicking it opens Obsidi
 
 | Setting | Default | Description |
 |---------|---------|-------------|
+| Live Preview decorations | On | Render tokens as styled labels in Live Preview; the cursor reveals raw syntax inside a token |
 | Show canonical tag on hover | On | Tooltip shows `tag:#name` on hover |
 | Style mode | Link | `Link` = styled like a wikilink · `Tag pill` = styled like a native tag |
 | Debug logging | Off | Logs to DevTools console (Ctrl+Shift+I) |
@@ -112,7 +113,6 @@ Both usages are discoverable from a single click.
 
 ## Known limitations
 
-- **Live Preview** is not decorated — the raw syntax is visible in the editor. Reading view is fully supported.
 - No autocomplete while typing tokens.
 - No hover preview of matching notes.
 - No tag rename / refactor tooling.
