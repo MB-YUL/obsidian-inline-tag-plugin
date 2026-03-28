@@ -1,4 +1,16 @@
-import { App, Plugin, PluginSettingTab, Setting, TFile } from "obsidian";
+import {
+	App,
+	Editor,
+	EditorPosition,
+	EditorSuggest,
+	EditorSuggestContext,
+	EditorSuggestTriggerInfo,
+	FuzzySuggestModal,
+	Plugin,
+	PluginSettingTab,
+	Setting,
+	TFile,
+} from "obsidian";
 import {
 	ViewPlugin,
 	ViewUpdate,
@@ -222,6 +234,91 @@ function createHybridTagViewPlugin(settings: PluginSettings) {
 	);
 }
 
+// ── Tag autocomplete (EditorSuggest) ─────────────────────────────────────────
+
+function getVaultTags(app: App): string[] {
+	// getTags() exists at runtime but is absent from the shipped type definitions.
+	const cache = app.metadataCache as unknown as { getTags(): Record<string, number> };
+	return Object.keys(cache.getTags())
+		.map((t) => t.slice(1))
+		.sort();
+}
+
+class TagEditorSuggest extends EditorSuggest<string> {
+	private tags: string[] = [];
+	private tagsLower: string[] = [];
+
+	constructor(app: App, private plugin: HybridTagLinkPlugin) {
+		super(app);
+		this.refreshCache();
+		// Keep the cache in sync as the vault index updates.
+		plugin.registerEvent(app.metadataCache.on("resolved", () => this.refreshCache()));
+	}
+
+	private refreshCache(): void {
+		this.tags = getVaultTags(this.app);
+		this.tagsLower = this.tags.map((t) => t.toLowerCase());
+	}
+
+	onTrigger(cursor: EditorPosition, editor: Editor, _file: TFile | null): EditorSuggestTriggerInfo | null {
+		const line = editor.getLine(cursor.line);
+		const textBefore = line.slice(0, cursor.ch);
+		const match = textBefore.match(/\[\[#([^\s|\]]*)$/);
+		if (!match) return null;
+		return {
+			start: { line: cursor.line, ch: cursor.ch - match[1].length },
+			end: cursor,
+			query: match[1],
+		};
+	}
+
+	getSuggestions(context: EditorSuggestContext): string[] {
+		const query = context.query.toLowerCase();
+		return this.tags.filter((_, i) => this.tagsLower[i].includes(query));
+	}
+
+	renderSuggestion(tag: string, el: HTMLElement): void {
+		el.setText("#" + tag);
+	}
+
+	selectSuggestion(tag: string, _evt: MouseEvent | KeyboardEvent): void {
+		if (!this.context) return;
+		const { editor, start, end } = this.context;
+		const prefix = `[[#${tag}|`;
+		const insertFrom: EditorPosition = { line: start.line, ch: start.ch - "[[#".length };
+		editor.replaceRange(`${prefix}]]`, insertFrom, end);
+		editor.setCursor({ line: start.line, ch: insertFrom.ch + prefix.length });
+
+		if (this.plugin.settings.debugLogging) {
+			console.debug("[inline-tag] autocomplete selected:", tag);
+		}
+	}
+}
+
+// ── Tag picker modal (for right-click wrapping) ───────────────────────────────
+
+class TagPickerModal extends FuzzySuggestModal<string> {
+	private readonly tags: string[];
+
+	constructor(app: App, private onSelect: (tag: string) => void) {
+		super(app);
+		this.setPlaceholder("Search tags…");
+		this.tags = getVaultTags(app);
+	}
+
+	getItems(): string[] {
+		return this.tags;
+	}
+
+	getItemText(tag: string): string {
+		return tag;
+	}
+
+	onChooseItem(tag: string, _evt: MouseEvent | KeyboardEvent): void {
+		this.onSelect(tag);
+	}
+}
+
 // ── Plugin ───────────────────────────────────────────────────────────────────
 
 export default class HybridTagLinkPlugin extends Plugin {
@@ -305,6 +402,25 @@ export default class HybridTagLinkPlugin extends Plugin {
 				appAny.commands.executeCommandById("global-search:open");
 			}
 		});
+
+		this.registerEditorSuggest(new TagEditorSuggest(this.app, this));
+
+		this.registerEvent(
+			this.app.workspace.on("editor-menu", (menu, editor) => {
+				const selection = editor.getSelection();
+				if (!selection) return;
+				menu.addItem((item) =>
+					item
+						.setTitle("Wrap as inline tag")
+						.setIcon("tag")
+						.onClick(() => {
+							new TagPickerModal(this.app, (tag) => {
+								editor.replaceSelection(`[[#${tag}|${selection}]]`);
+							}).open();
+						})
+				);
+			})
+		);
 
 		this.addSettingTab(new HybridTagLinkSettingTab(this.app, this));
 	}

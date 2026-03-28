@@ -111,10 +111,21 @@ Both usages are discoverable from a single click.
 
 ---
 
+## Inserting tags
+
+### Autocomplete while typing
+
+Start a token with `[[#` and type a few characters — a suggestion list filtered from your vault's existing tags appears immediately. Select one to insert `[[#tagname|` with the cursor ready for the label.
+
+### Wrap selected text
+
+Select any text, right-click, and choose **Wrap as inline tag**. A fuzzy-search modal lets you pick the tag; the selection becomes the label.
+
+---
+
 ## Known limitations
 
 - **Live Preview not available on mobile.** Obsidian for Android and iOS does not use the CodeMirror 6 editor extension system, so the Live Preview decoration engine cannot run there. Tokens will render correctly in Reading view on all platforms.
-- No autocomplete while typing tokens.
 - No hover preview of matching notes.
 - No tag rename / refactor tooling.
 
